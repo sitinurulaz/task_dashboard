@@ -148,7 +148,7 @@ convert_selected = st.sidebar.multiselect(
     options=convert_options,
     default=convert_options
 )
-df_filtered_2= df_final[df_final["convert_to_label"].isin(convert_selected)]
+df_filtered= df_filtered[df_filtered["convert_to_label"].isin(convert_selected)]
 
    
     
@@ -315,5 +315,6 @@ if "due_date" in df_filtered.columns:
         st.info("Tidak ada data untuk menampilkan grafik harian.")
 else:
     st.warning("Kolom due_date tidak ditemukan di dataset.")
+
 
 
