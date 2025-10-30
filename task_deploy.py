@@ -17,6 +17,9 @@ st.markdown("Analisis performa sales berdasarkan data task CRM secara langsung."
 # =============================
 # 💡 Ganti token di bawah dengan token Qontak CRM (berlaku 6 jam)
 
+API_TOKEN = st.secrets["Qontak"]["API_TOKEN"]
+
+
 # =============================
 # 3️⃣ AMBIL DATA LANGSUNG DARI API (TANPA FUNGSI DEF)
 # =============================
@@ -312,4 +315,5 @@ if "due_date" in df_filtered.columns:
         st.info("Tidak ada data untuk menampilkan grafik harian.")
 else:
     st.warning("Kolom due_date tidak ditemukan di dataset.")
+
 
