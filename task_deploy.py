@@ -23,7 +23,7 @@ API_TOKEN = st.secrets["Qontak"]["API_TOKEN"]
 # =============================
 # 3️⃣ AMBIL DATA LANGSUNG DARI API (TANPA FUNGSI DEF)
 # =============================
-url = "https://app.qontak.com/api/v3.1/tasks?filter=alltask&page=1&per_page=1000"
+url = "https://app.qontak.com/api/v3.1/tasks?filter=alltask&page=1&per_page=2000"
 
 headers = {
     "Authorization": f"Bearer {API_TOKEN}",  # <-- Bearer token
@@ -315,6 +315,7 @@ if "due_date" in df_filtered.columns:
         st.info("Tidak ada data untuk menampilkan grafik harian.")
 else:
     st.warning("Kolom due_date tidak ditemukan di dataset.")
+
 
 
 
