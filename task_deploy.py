@@ -96,26 +96,22 @@ st.sidebar.header("🔍 Filter Data")
 
 # Filter due date
 from datetime import datetime, timedelta
+today = datetime.now().date()
 
 filter_type = st.sidebar.radio("🗓 Filter Tanggal", ["1 Tanggal", "Range Tanggal"])
 
 if filter_type == "1 Tanggal":
     selected_date = st.sidebar.date_input(
         "Pilih tanggal",
-       df_final["due_date"].dropna().min().date() if df_final["due_date"].notnull().any() else datetime.now().date()
+        value=today   # ✅ DEFAULT TODAY
     )
-    # Filter untuk satu tanggal
     df_filtered = df_final[df_final["due_date"].dt.date == selected_date]
 
 elif filter_type == "Range Tanggal":
     start_date, end_date = st.sidebar.date_input(
         "Pilih rentang tanggal",
-        [
-            df_final["due_date"].dropna().min().date() if df_final["due_date"].notnull().any() else datetime.now().date() - timedelta(days=7),
-            df_final["due_date"].dropna().max().date() if df_final["due_date"].notnull().any() else datetime.now().date()
-        ]
+        value=[today, today]   # ✅ DEFAULT RANGE = TODAY
     )
-    # Filter untuk range tanggal
     df_filtered = df_final[
         (df_final["due_date"].dt.date >= start_date) &
         (df_final["due_date"].dt.date <= end_date)
@@ -315,6 +311,7 @@ if "due_date" in df_filtered.columns:
         st.info("Tidak ada data untuk menampilkan grafik harian.")
 else:
     st.warning("Kolom due_date tidak ditemukan di dataset.")
+
 
 
 
