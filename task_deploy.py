@@ -39,7 +39,7 @@ if response.status_code == 200 and "application/json" in content_type:
     data = response.json()
     
     # Ubah ke DataFrame untuk tampilan tabel
-    df = json_normalize(data["response"])
+df = json_normalize(data["response"])
 
 # =============================
 # 4️⃣ BERSIHKAN DAN SIAPKAN DATA
@@ -308,6 +308,7 @@ if "due_date" in df_filtered.columns:
         st.info("Tidak ada data untuk menampilkan grafik harian.")
 else:
     st.warning("Kolom due_date tidak ditemukan di dataset.")
+
 
 
 
