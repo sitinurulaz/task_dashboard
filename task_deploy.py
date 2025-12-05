@@ -19,7 +19,6 @@ st.markdown("Analisis performa sales berdasarkan data task CRM secara langsung."
 
 API_TOKEN = st.secrets["Qontak"]["API_TOKEN"]
 
-
 # =============================
 # 3️⃣ AMBIL DATA LANGSUNG DARI API (TANPA FUNGSI DEF)
 # =============================
@@ -40,7 +39,7 @@ if response.status_code == 200 and "application/json" in content_type:
     data = response.json()
     
     # Ubah ke DataFrame untuk tampilan tabel
-    df=json_normalize(data["response"])
+    df = json_normalize(data["response"])
 
 # =============================
 # 4️⃣ BERSIHKAN DAN SIAPKAN DATA
@@ -116,8 +115,6 @@ elif filter_type == "Range Tanggal":
         (df_final["due_date"].dt.date >= start_date) &
         (df_final["due_date"].dt.date <= end_date)
     ]
-
-
 # Filter status
 status_selected = st.sidebar.multiselect(
     "Pilih Status Task",
@@ -144,7 +141,7 @@ convert_selected = st.sidebar.multiselect(
     options=convert_options,
     default=convert_options
 )
-df_filtered= df_filtered[df_filtered["convert_to_label"].isin(convert_selected)]
+df_filtered_2= df_final[df_final["convert_to_label"].isin(convert_selected)]
 
    
     
@@ -269,9 +266,9 @@ create_conversion_summary(df_filtered, 'Invoice', "📋 Jumlah Invoice per User 
 
 
 # =============================
-# 🗓 8️⃣ GRAFIK DAILY TASK BERDASARKAN STATUS
+# 8️⃣ GRAFIK DAILY TASK BERDASARKAN STATUS
 # =============================
-st.subheader("🗓 Grafik Daily Task Berdasarkan Status Task")
+st.subheader("Grafik Daily Task Berdasarkan Status Task")
 
 # Pastikan kolom due_date ada
 if "due_date" in df_filtered.columns:
@@ -311,10 +308,6 @@ if "due_date" in df_filtered.columns:
         st.info("Tidak ada data untuk menampilkan grafik harian.")
 else:
     st.warning("Kolom due_date tidak ditemukan di dataset.")
-
-
-
-
 
 
 
