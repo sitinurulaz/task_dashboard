@@ -109,7 +109,11 @@ if filter_type == "1 Tanggal":
         "Pilih tanggal",
         value=today   # ✅ DEFAULT TODAY
     )
-    df_filtered = df_final[df_final["due_date"].dt.date == selected_date]
+    df_filtered = df_final[
+    df_final["due_date"].notna() &
+    (df_final["due_date"].dt.date == selected_date)
+]
+
 
 elif filter_type == "Range Tanggal":
     start_date, end_date = st.sidebar.date_input(
@@ -117,9 +121,10 @@ elif filter_type == "Range Tanggal":
         value=[today, today]   # ✅ DEFAULT RANGE = TODAY
     )
     df_filtered = df_final[
-        (df_final["due_date"].dt.date >= start_date) &
-        (df_final["due_date"].dt.date <= end_date)
-    ]
+    df_final["due_date"].notna() &
+    (df_final["due_date"].dt.date >= start_date) &
+    (df_final["due_date"].dt.date <= end_date)
+]
 # Filter status
 status_selected = st.sidebar.multiselect(
     "Pilih Status Task",
@@ -313,6 +318,7 @@ if "due_date" in df_filtered.columns:
         st.info("Tidak ada data untuk menampilkan grafik harian.")
 else:
     st.warning("Kolom due_date tidak ditemukan di dataset.")
+
 
 
 
