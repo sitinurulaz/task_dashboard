@@ -61,7 +61,13 @@ df_final['merged'] = df_expanded.apply(lambda row: ', '.join([f"{k}: {v}" for k,
 if df_final.empty:
     st.warning("⚠️ Data kosong atau belum berhasil diambil.")
     st.stop()
-df_final["due_date"] = pd.to_datetime(df_final["due_date"], errors="coerce")
+
+df_final["due_date"] = pd.to_datetime(
+    df_final["due_date"],
+    format="mixed",
+    errors="coerce"
+)
+
 df_final["convert_to"] = pd.to_numeric(df_final["convert_to"], errors="coerce").astype("Int64")
 df_final["engagement_type"] = pd.to_numeric(df_final["engagement_type"], errors="coerce").astype("Int64")
 
@@ -307,6 +313,7 @@ if "due_date" in df_filtered.columns:
         st.info("Tidak ada data untuk menampilkan grafik harian.")
 else:
     st.warning("Kolom due_date tidak ditemukan di dataset.")
+
 
 
 
