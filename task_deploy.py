@@ -37,8 +37,9 @@ content_type = response.headers.get("Content-Type", "")
 
 if response.status_code == 200 and "application/json" in content_type:
     data = response.json()
+    
     # Ubah ke DataFrame untuk tampilan tabel
-    df = json_normalize(data["response"])
+df = json_normalize(data["response"])
 
 # =============================
 # 4️⃣ BERSIHKAN DAN SIAPKAN DATA
@@ -61,13 +62,7 @@ df_final['merged'] = df_expanded.apply(lambda row: ', '.join([f"{k}: {v}" for k,
 if df_final.empty:
     st.warning("⚠️ Data kosong atau belum berhasil diambil.")
     st.stop()
-
-df_final["due_date"] = pd.to_datetime(
-    df_final["due_date"],
-    format="mixed",
-    errors="coerce"
-)
-
+df_final["due_date"] = pd.to_datetime(df_final.get("due_date"), errors="coerce")
 df_final["convert_to"] = pd.to_numeric(df_final["convert_to"], errors="coerce").astype("Int64")
 df_final["engagement_type"] = pd.to_numeric(df_final["engagement_type"], errors="coerce").astype("Int64")
 
@@ -109,11 +104,7 @@ if filter_type == "1 Tanggal":
         "Pilih tanggal",
         value=today   # ✅ DEFAULT TODAY
     )
-    df_filtered = df_final[
-    df_final["due_date"].notna() &
-    (df_final["due_date"].dt.date == selected_date)
-]
-
+    df_filtered = df_final[df_final["due_date"].dt.date == selected_date]
 
 elif filter_type == "Range Tanggal":
     start_date, end_date = st.sidebar.date_input(
@@ -121,10 +112,9 @@ elif filter_type == "Range Tanggal":
         value=[today, today]   # ✅ DEFAULT RANGE = TODAY
     )
     df_filtered = df_final[
-    df_final["due_date"].notna() &
-    (df_final["due_date"].dt.date >= start_date) &
-    (df_final["due_date"].dt.date <= end_date)
-]
+        (df_final["due_date"].dt.date >= start_date) &
+        (df_final["due_date"].dt.date <= end_date)
+    ]
 # Filter status
 status_selected = st.sidebar.multiselect(
     "Pilih Status Task",
@@ -318,13 +308,4 @@ if "due_date" in df_filtered.columns:
         st.info("Tidak ada data untuk menampilkan grafik harian.")
 else:
     st.warning("Kolom due_date tidak ditemukan di dataset.")
-
-
-
-
-
-
-
-
-
 
