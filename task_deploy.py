@@ -62,7 +62,15 @@ df_final['merged'] = df_expanded.apply(lambda row: ', '.join([f"{k}: {v}" for k,
 if df_final.empty:
     st.warning("⚠️ Data kosong atau belum berhasil diambil.")
     st.stop()
-df_final["due_date"] = pd.to_datetime(df_final.get("due_date"), errors="coerce")
+if "due_date" in df_final.columns:
+    df_final["due_date"] = pd.to_datetime(
+        df_final["due_date"],
+        errors="coerce",
+        utc=True
+    ).dt.tz_localize(None)
+else:
+    df_final["due_date"] = pd.NaT
+
 df_final["convert_to"] = pd.to_numeric(df_final["convert_to"], errors="coerce").astype("Int64")
 df_final["engagement_type"] = pd.to_numeric(df_final["engagement_type"], errors="coerce").astype("Int64")
 
@@ -104,7 +112,11 @@ if filter_type == "1 Tanggal":
         "Pilih tanggal",
         value=today   # ✅ DEFAULT TODAY
     )
-    df_filtered = df_final[df_final["due_date"].dt.date == selected_date]
+    df_filtered = df_final[
+    df_final["due_date"].notna() &
+    (df_final["due_date"].dt.date == selected_date)
+]
+
 
 elif filter_type == "Range Tanggal":
     start_date, end_date = st.sidebar.date_input(
