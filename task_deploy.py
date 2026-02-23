@@ -122,7 +122,7 @@ df_final["due_date"] = pd.to_datetime(df_final["due_date"])
 table = (
     df_final
     .loc[df_final["due_date"].dt.date == pd.Timestamp.today().date()]
-    .groupby(["crm_person_full_name", "crm_task_status"])
+    .groupby(["user_full_name", "crm_task_status"])
     .size()
     .unstack(fill_value=0)
 )
@@ -138,5 +138,6 @@ table = table.reset_index()
 # --- Tampilkan ---
 st.subheader(f"Due Date: {pd.Timestamp.today().date()}")
 st.dataframe(table, use_container_width=True)
+
 
 
