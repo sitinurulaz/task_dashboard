@@ -95,6 +95,17 @@ mapping_convert = {
 
 df_final["convert_to_label"] = df_final["convert_to"].map(mapping_convert)
 
+user_mapping = {
+    171110: "Anin",
+    171112: "Ega",
+    171113: "Nita",
+    171363: "Reza",
+    222919: "Cantika",
+    233929: "Rahma",
+    251373: "Naim"
+}
+
+df_final["user_full_name"] = df_final["user_id"].map(user_mapping)
 
 # =============================
 # 5️⃣ FILTER DATA
@@ -320,4 +331,5 @@ if "due_date" in df_filtered.columns:
         st.info("Tidak ada data untuk menampilkan grafik harian.")
 else:
     st.warning("Kolom due_date tidak ditemukan di dataset.")
+
 
