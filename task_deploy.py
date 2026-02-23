@@ -58,19 +58,6 @@ df_final = pd.concat([df.drop(columns=['additional_fields']), df_expanded], axis
 # Jika ingin menyatukan kolom hasil menjadi satu string dengan koma
 df_final['merged'] = df_expanded.apply(lambda row: ', '.join([f"{k}: {v}" for k, v in row.items() if pd.notnull(v)]), axis=1)
 
-
-if df_final.empty:
-    st.warning("⚠️ Data kosong atau belum berhasil diambil.")
-    st.stop()
-if "due_date" in df_final.columns:
-    df_final["due_date"] = pd.to_datetime(
-        df_final["due_date"],
-        errors="coerce",
-        utc=True
-    ).dt.tz_localize(None)
-else:
-    df_final["due_date"] = pd.NaT
-
 df_final["convert_to"] = pd.to_numeric(df_final["convert_to"], errors="coerce").astype("Int64")
 df_final["engagement_type"] = pd.to_numeric(df_final["engagement_type"], errors="coerce").astype("Int64")
 
@@ -107,8 +94,6 @@ user_mapping = {
 
 df_final["user_full_name"] = df_final["user_id"].map(user_mapping)
 
-
-
 st.title("Report Task Due Today")
 
 # --- Load Data ---
@@ -128,16 +113,17 @@ table = (
 )
 
 # Tambah total per orang
-table["Total Keseluruhan"] = table.sum(axis=1)
+table["Total"] = table.sum(axis=1)
 
 # Tambah total bawah
-table.loc["Total Keseluruhan"] = table.sum()
+table.loc["Total"] = table.sum()
 
 table = table.reset_index()
 
 # --- Tampilkan ---
 st.subheader(f"Due Date: {pd.Timestamp.today().date()}")
 st.dataframe(table, use_container_width=True)
+
 
 
 
